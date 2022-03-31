@@ -9,6 +9,7 @@ if ($exitCode -ne 0) {
 }
 
 # Run connect command
+# "cloud" argument value would be "AzureCloud" or "AzureGovernment"
 & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" connect `
   --service-principal-id $env:servicePrincipalClientId `
   --service-principal-secret $env:servicePrincipalSecret `
@@ -19,7 +20,6 @@ if ($exitCode -ne 0) {
   --cloud "AzureCloud" `
   --tags "Project=jumpstart_azure_arc_servers" `
   --correlation-id "d009f5dd-dba8-4ac7-bac9-b54ef3a6671a"
-
 # Check if we need to set proxy environment variable
 if ($env:ConnectivityMethodProxyURL -notin @($null, "")) {
   Write-Verbose -Message "Setting proxy configuration: $Proxy" -Verbose
