@@ -8,6 +8,12 @@ if ($exitCode -ne 0) {
   throw "Installation failed: $message See installationlog.txt for additional details."
 }
 
+# Check if we need to set proxy environment variable
+if ($env:ConnectivityMethodProxyURL -notin @($null, "")) {
+  Write-Verbose -Message "Setting proxy configuration: $Proxy" -Verbose
+  & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" config set proxy.url ${Proxy}
+}
+
 # Run connect command
 # "cloud" argument value would be "AzureCloud" or "AzureGovernment"
 & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent.exe" connect `
@@ -20,8 +26,3 @@ if ($exitCode -ne 0) {
   --cloud "AzureCloud" `
   --tags "Project=jumpstart_azure_arc_servers" `
   --correlation-id "d009f5dd-dba8-4ac7-bac9-b54ef3a6671a"
-# Check if we need to set proxy environment variable
-if ($env:ConnectivityMethodProxyURL -notin @($null, "")) {
-  Write-Verbose -Message "Setting proxy configuration: $Proxy" -Verbose
-  & "$env:ProgramW6432\AzureConnectedMachineAgent\azcmagent" config set proxy.url ${Proxy}
-}
